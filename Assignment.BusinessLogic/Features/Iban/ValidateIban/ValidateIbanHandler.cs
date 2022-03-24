@@ -1,4 +1,5 @@
-﻿using Assignment.BusinessLogic.Features.Shared;
+﻿using Assignment.BusinessLogic.Exceptions;
+using Assignment.BusinessLogic.Features.Shared;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading;
@@ -47,6 +48,11 @@ namespace Assignment.BusinessLogic.Features.Iban.ValidateIban
         private bool HasCorrectLength(string countryCode, int inputLength)
         {
             int.TryParse(_configuration.GetSection($"IbanLength:{countryCode}").Value, out var length);
+
+            if (length == 0)
+            {
+                throw new BusinessException(null, $"{countryCode} is not yet implemented", System.Net.HttpStatusCode.BadRequest);
+            }
 
             return (length == inputLength);
         }
